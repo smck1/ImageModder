@@ -168,8 +168,8 @@ def generatemods(filepath, outpath, watermark):
     saveenhanced(originalimage, fname, outpath, sharpnessfactor=1.5) #increase sharpness
 
     # Carving fragment simulation
-    savefragment(filepath, fname, outpath, 0.7)
-    savefragment(filepath, fname, outpath, 0.3)
+    #savefragment(filepath, fname, outpath, 0.7)
+    #savefragment(filepath, fname, outpath, 0.3)
 
 
 # Parse commandline args.
