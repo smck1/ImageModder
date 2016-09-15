@@ -5,11 +5,14 @@ from PIL import Image, ImageEnhance
 
 OUTPATH = 'output'
 
-def savebaselineJPEG(image, fname, outpath):
+def savebaselineJPEG(image, fname, outpath, optimize=True, quality=80, recompressed=False):
     # Convert the source file to a JPEG with no other modification
-    fpath = os.path.join(outpath, fname + '_base' + '.jpg')
+    if recompressed:
+        fpath = os.path.join(outpath, fname + '_recompressed' + '.jpg')
+    else:
+        fpath = os.path.join(outpath, fname + '_base' + '.jpg')
     try:
-        image.save(fpath, optimize=True)
+        image.save(fpath, optimize=optimize, quality=quality)
         print "Saved {}".format(fpath)
     except IOError, m:
         print "Baseline JPEG creation failed for: {}. \nReason:{}".format(fname,
@@ -25,7 +28,7 @@ def saverotation(image, fname, outpath, degreescounterlockwise=90):
     except IOError, m:
         print "Rotated({}) image creation failed for: {}. \nReason:{}".format(degreescounterlockwise,fname,m)
 
-def saveresize(image, fname, outpath, scalefactor=0.5):
+def saverescale(image, fname, outpath, scalefactor=0.5):
     # Save a scaled copy of the image, uses a single scale factor for both x,y axes to maintain aspect ratio
     fpath = os.path.join(outpath, fname + '_resize{}'.format(scalefactor) + '.jpg')
     newsize = (int(image.width * scalefactor), int(image.height * scalefactor))
@@ -35,6 +38,16 @@ def saveresize(image, fname, outpath, scalefactor=0.5):
         print "Saved {}".format(fpath)
     except IOError, m:
         print "Resize({}) image creation failed for: {}. \nReason:{}".format(scalefactor,fname,m)
+
+def savethumb(image, fname, outpath, size=(128,128)):
+    # Save a thumbnail of the image, preserves aspect ratio, so longest side will be of size[max(x,y)].
+    fpath = os.path.join(outpath, fname + '_thumbnail{}_{}'.format(size[0], size[1]) + '.jpg')
+    im = image.thumbnail(newsize)
+    try:
+        im.save(fpath, optimize=True)
+        print "Saved {}".format(fpath)
+    except IOError, m:
+        print "Resize({}) image creation failed for: {}. \nReason:{}".format(size,fname,m)
 
 def savecrop(image, fname, outpath, cropfactors=(0.2, 0.2, 0.2, 0.2)):
     # Save a cropped version of the image.
@@ -145,17 +158,26 @@ def generatemods(filepath, outpath, watermark):
     fname, ext = os.path.splitext(filepath)
     fname = fname.split(os.sep)[-1]
 
-    # Regular JPEG conversion
-    savebaselineJPEG(originalimage,fname, outpath)
+    if ext.lower() not in ['jpeg', 'jpg']:
+        # Regular JPEG conversion of non JPEG
+        savebaselineJPEG(originalimage,fname, outpath, optimize=True, quality=75) #default pil quality
+    else:
+        # It is a JPEG, save a baseline recompression
+        savebaselineJPEG(originalimage,fname, outpath, optimize=True, quality=75, recompressed=True) #default pil quality
+
+    # Lower quality version
+    savebaselineJPEG(originalimage,fname, outpath, optimize=True, quality=30)
+    savebaselineJPEG(originalimage,fname, outpath, optimize=True, quality=60)
 
     # Watermark and variousflips, rotations and cropping
     savewatermarked(originalimage, fname, outpath, watermark)
     saveflip(originalimage, fname, outpath, 'x')
     saveflip(originalimage, fname, outpath, 'y')
     savecrop(originalimage, fname, outpath) #defaults
-    saveresize(originalimage, fname, outpath, 0.7)
-    saveresize(originalimage, fname, outpath, 0.3)
-    saverotation(originalimage, fname, outpath) #defaults
+    saverescale(originalimage, fname, outpath, 0.5)
+    saverescale(originalimage, fname, outpath, 1.5)
+    savethumb(originalimage, fname)
+    saverotation(originalimage, fname, outpath) #defaults, 90 counterclock
 
     # Image enhancements, colour, contrast, etc.
     saveenhanced(originalimage, fname, outpath, colourfactor=0.5) #reduce colours
