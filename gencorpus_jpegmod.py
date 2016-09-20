@@ -197,9 +197,9 @@ def generatemods(filepath, outpath, watermark):
     saveenhanced(originalimage, fname, outpath, colourfactor=0.5) #reduce colours
     saveenhanced(originalimage, fname, outpath, colourfactor=1.5) #increase colours
     #saveenhanced(originalimage, fname, outpath, brightnessfactor=0.5) #reduce brightness
-    saveenhanced(originalimage, fname, outpath, brightnessfactor=1.5) #increase brightness
+    #saveenhanced(originalimage, fname, outpath, brightnessfactor=1.5) #increase brightness
     #saveenhanced(originalimage, fname, outpath, contrastfactor=0.5) #reduce contrast
-    saveenhanced(originalimage, fname, outpath, contrastfactor=1.5) #increase contrast
+    #saveenhanced(originalimage, fname, outpath, contrastfactor=1.5) #increase contrast
     saveenhanced(originalimage, fname, outpath, sharpnessfactor=0.5) #reduce sharpness
     #saveenhanced(originalimage, fname, outpath, sharpnessfactor=1.5) #increase sharpness
 
