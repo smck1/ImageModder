@@ -4,7 +4,6 @@ from sys import argv
 from PIL import Image, ImageEnhance
 from copy import copy
 
-OUTPATH = 'output'
 
 def saveAsPNG(image, fname, outpath):
     # Convert the source file to a PNG with no other modification
@@ -27,19 +26,27 @@ def generatemods(filepath, outpath):
 # Parse commandline args.
 path = ''
 
-if len(argv) < 2:
-    print "Please specify base image directory"
+if len(argv) != 3:
+    print "usage: <original_images_dir> <output_dir>"
     exit()
-elif len(argv) == 2:
+elif len(argv) == 3:
     path = argv[1]
-else:
-    print "Please only provide a single argument - directory of base images."
-    exit()
+    outpath = argv[2]
 
 
 
-# Modify all items in the path, save mods to OUTPATH
-for im in os.listdir(path):
-    fpath = os.path.join(path, im)
-    print fpath
-    generatemods(fpath, OUTPATH)
+
+# Modify all items in the path, save mods to outpath
+
+for subdir, dirs, files in os.walk(path):
+    for f in files:
+        try:
+            fpath = os.path.join(subdir, f)
+            print fpath
+            generatemods(fpath, outpath)
+        except Exception:
+            print "problem processing: {}".format(f)
+# for im in os.listdir(path):
+#     fpath = os.path.join(path, im)
+#     print fpath
+#     generatemods(fpath, outpath, watermark)

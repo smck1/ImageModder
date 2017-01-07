@@ -4,8 +4,6 @@ from sys import argv
 from PIL import Image, ImageEnhance
 from copy import copy
 
-OUTPATH = 'output'
-
 def savebaselineJPEG(image, fname, outpath, optimize=True, quality=75, recompressed=False):
     # Convert the source file to a JPEG with no other modification
 
@@ -212,14 +210,13 @@ def generatemods(filepath, outpath, watermark):
 path = ''
 watermarkpath = os.path.join('resources', 'watermark.png')
 
-if len(argv) < 2:
-    print "Please specify base image directory"
+if len(argv) != 3:
+    print "usage: original_images_dir output_dir"
     exit()
-elif len(argv) == 2:
+elif len(argv) == 3:
     path = argv[1]
-else:
-    print "Please only provide a single argument - directory of base images."
-    exit()
+    outpath = argv[2]
+
 
 # Open the watermakr file
 try:
@@ -231,4 +228,4 @@ except IOError, m:
 for im in os.listdir(path):
     fpath = os.path.join(path, im)
     print fpath
-    generatemods(fpath, OUTPATH, watermark)
+    generatemods(fpath, outpath, watermark)
