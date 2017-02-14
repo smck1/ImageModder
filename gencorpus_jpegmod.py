@@ -20,9 +20,9 @@ def savebaselineJPEG(image, fname, outpath, optimize=True, quality=75, recompres
 
     try:
         if useexistingqtables:
-            image.save(fpath, optimize=optimize, qtables="keep")
+            image.save(fpath, subsample="keep", optimize=optimize, qtables="keep")
         else:
-            image.save(fpath, optimize=optimize, quality=quality)
+            image.save(fpath, subsample="keep", optimize=optimize, quality=quality)
         print "Saved {}".format(fpath)
     except IOError, m:
         print "Baseline JPEG creation failed for: {}. \nReason:{}".format(fname,
@@ -34,7 +34,7 @@ def saverotation(image, fname, outpath, degreescounterlockwise=90):
     im = copy(image)
     im = im.rotate(degreescounterlockwise)
     try:
-        im.save(fpath, qtables="keep", optimize=True)
+        im.save(fpath, subsample="keep", qtables="keep", optimize=True)
         print "Saved {}".format(fpath)
     except IOError, m:
         print "Rotated({}) image creation failed for: {}. \nReason:{}".format(degreescounterlockwise,fname,m)
@@ -46,7 +46,7 @@ def saverescale(image, fname, outpath, scalefactor=0.5):
     im = copy(image)
     im = im.resize(newsize)
     try:
-        im.save(fpath, qtables="keep", optimize=True)
+        im.save(fpath, subsample="keep", qtables="keep", optimize=True)
         print "Saved {}".format(fpath)
     except IOError, m:
         print "Resize({}) image creation failed for: {}. \nReason:{}".format(scalefactor,fname,m)
@@ -57,7 +57,7 @@ def savethumb(image, fname, outpath, size=(128,128)):
     im = copy(image)
     im.thumbnail(size)
     try:
-        im.save(fpath, qtables="keep", optimize=True)
+        im.save(fpath, subsample="keep", qtables="keep", optimize=True)
         print "Saved {}".format(fpath)
     except IOError, m:
         print "Resize({}) image creation failed for: {}. \nReason:{}".format(size,fname,m)
@@ -75,7 +75,7 @@ def savecrop(image, fname, outpath, cropfactors=(0.2, 0.2, 0.2, 0.2)):
     im = copy(image)
     im = im.crop(cropbox)
     try:
-        im.save(fpath, qtables="keep", optimize=True)
+        im.save(fpath, subsample="keep", qtables="keep", optimize=True)
         print "Saved {}".format(fpath)
     except IOError, m:
         print "Crop({}) image creation failed for: {}. \nReason:{}".format(cropfactors,fname,m)
@@ -91,7 +91,7 @@ def saveflip(image, fname, outpath, axis='x'):
     else:
         raise Exception('No valid axis procvided for flipping: {} - received value: {}'.format(fname, axis))
     try:
-        im.save(fpath, qtables="keep", qtables="keep", optimize=True)
+        im.save(fpath, subsample="keep", qtables="keep", qtables="keep", optimize=True)
         print "Saved {}".format(fpath)
     except IOError, m:
         print "Flipped({}) image creation failed for: {}. \nReason:{}".format(axis,fname,m)
@@ -116,7 +116,7 @@ def savewatermarked(image, fname, outpath, watermark):
     # Add it to the image
     im.paste(scaledwatermark, (image.width - targetwdith, image.height - targetheight), scaledwatermark)
     try:
-        im.save(fpath, qtables="keep", qtables="keep", optimize=True)
+        im.save(fpath, subsample="keep", qtables="keep", qtables="keep", optimize=True)
         print "Saved {}".format(fpath)
     except IOError, m:
         print "Watermarked image creation failed for: {}. \nReason:{}".format(fname,m)
@@ -142,7 +142,7 @@ def saveenhanced(image, fname, outpath, colourfactor=1, brightnessfactor=1, cont
         im = en.enhance(sharpnessfactor)
 
     try:
-        im.save(fpath, qtables="keep", qtables="keep", optimize=True)
+        im.save(fpath, subsample="keep", qtables="keep", qtables="keep", optimize=True)
         print "Saved {}".format(fpath)
     except IOError, m:
         print "Enhanced({}) image creation failed for: {}. \nReason:{}".format(estring,fname,m)
