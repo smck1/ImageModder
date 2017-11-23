@@ -10,7 +10,7 @@ def saveAsPNG(image, fname, outpath):
     fpath = os.path.join(outpath, fname + '.png')
     try:
         image.save(fpath)
-        print "Saved {}".format(fpath)
+        #print "Saved {}".format(fpath)
     except IOError, m:
         print "Saving as PNG failed for: {}. \nReason:{}".format(fname, m)
 
@@ -34,16 +34,21 @@ elif len(argv) == 3:
     outpath = argv[2]
 
 
-
+if not os.path.exists(path):
+    print "Output directory does not exist: Creating."
+    os.makedirs(path)
 
 # Modify all items in the path, save mods to outpath
 
+count = 0
 for subdir, dirs, files in os.walk(path):
     for f in files:
         try:
             fpath = os.path.join(subdir, f)
-            print fpath
             generatemods(fpath, outpath)
+            count +=1
+            if count %1000 ==0:
+                print "Converted:", count
         except Exception:
             print "problem processing: {}".format(f)
 # for im in os.listdir(path):
