@@ -3,7 +3,7 @@ import os
 from sys import argv
 from PIL import Image, ImageEnhance
 from copy import copy
-
+from thread_utils import *
 
 def saveAsPNG(image, fname, outpath):
     # Convert the source file to a PNG with no other modification
@@ -39,18 +39,22 @@ if not os.path.exists(path):
     os.makedirs(path)
 
 # Modify all items in the path, save mods to outpath
-
+tpool = ThreadPool(4)
 count = 0
+print "Beginning conversion..."
 for subdir, dirs, files in os.walk(path):
     for f in files:
         try:
             fpath = os.path.join(subdir, f)
-            generatemods(fpath, outpath)
+            tpool.add_task(generatemods, fpath, outpath)
+            #generatemods(fpath, outpath)
             count +=1
             if count %1000 ==0:
                 print "Converted:", count
         except Exception:
             print "problem processing: {}".format(f)
+
+tpool.wait_completion()
 # for im in os.listdir(path):
 #     fpath = os.path.join(path, im)
 #     print fpath
