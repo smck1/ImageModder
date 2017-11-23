@@ -34,9 +34,9 @@ elif len(argv) == 3:
     outpath = argv[2]
 
 
-if not os.path.exists(path):
+if not os.path.exists(outpath):
     print "Output directory does not exist: Creating."
-    os.makedirs(path)
+    os.makedirs(outpath)
 
 # Modify all items in the path, save mods to outpath
 tpool = ThreadPool(4)
