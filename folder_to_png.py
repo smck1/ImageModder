@@ -10,9 +10,9 @@ def saveAsPNG(image, fname, outpath):
     fpath = os.path.join(outpath, fname + '.png')
     try:
         image.save(fpath)
-        #print "Saved {}".format(fpath)
-    except IOError, m:
-        print "Saving as PNG failed for: {}. \nReason:{}".format(fname, m)
+        #print( "Saved {}".format(fpath))
+    except IOError as m:
+        print( "Saving as PNG failed for: {}. \nReason:{}".format(fname, m))
 
 
 def generatemods(filepath, outpath):
@@ -27,7 +27,7 @@ def generatemods(filepath, outpath):
 path = ''
 
 if len(argv) != 3:
-    print "usage: <original_images_dir> <output_dir>"
+    print( "usage: <original_images_dir> <output_dir>")
     exit()
 elif len(argv) == 3:
     path = argv[1]
@@ -35,13 +35,13 @@ elif len(argv) == 3:
 
 
 if not os.path.exists(outpath):
-    print "Output directory does not exist: Creating."
+    print( "Output directory does not exist: Creating.")
     os.makedirs(outpath)
 
 # Modify all items in the path, save mods to outpath
 tpool = ThreadPool(4)
 count = 0
-print "Beginning conversion..."
+print( "Beginning conversion...")
 for subdir, dirs, files in os.walk(path):
     for f in files:
         try:
@@ -50,12 +50,12 @@ for subdir, dirs, files in os.walk(path):
             #generatemods(fpath, outpath)
             count +=1
             if count %1000 ==0:
-                print "Converted:", count
+                print( "Converted:", count)
         except Exception:
-            print "problem processing: {}".format(f)
+            print( "problem processing: {}".format(f))
 
 tpool.wait_completion()
 # for im in os.listdir(path):
 #     fpath = os.path.join(path, im)
-#     print fpath
+#     print( fpath)
 #     generatemods(fpath, outpath, watermark)

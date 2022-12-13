@@ -1,7 +1,17 @@
-
 import threading
 from threading import Thread
-from Queue import Queue
+from queue import Queue
+from math import ceil
+
+def partitionList(l, numparts):
+    partsize = len(l)/float(numparts)
+    partsize= int(math.ceil(partsize))
+    partlist = []
+    counter = 0
+    for p in xrange(1,numparts):
+        partlist.append(l[partsize*(p-1):partsize*p])
+    partlist.append(l[partsize*(numparts-1):])
+    return partlist
 
 
 class Worker(Thread):
@@ -17,8 +27,9 @@ class Worker(Thread):
             func, args, kargs = self.tasks.get()
             try:
                 func(*args, **kargs)
-            except Exception, e:
-                print "Worker Error: {}".format(e)
+            except Exception as e:
+                print("Worker Error: {}".format(e))
+                
             finally:
                 self.tasks.task_done()
 
