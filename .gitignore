@@ -1,6 +1,8 @@
 #Image Directors
 output/
 baseimages/
+testout/
+testout2/
 
 # Pycharm
 .idea/

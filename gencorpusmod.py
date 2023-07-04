@@ -1,7 +1,7 @@
 import sys, os, argparse, csv
 from multiprocessing import Pool
 from tqdm import tqdm
-from jpegmod import *
+from mod import *
 from thread_utils import *
 
 
